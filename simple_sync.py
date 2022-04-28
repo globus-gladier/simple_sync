@@ -1,4 +1,4 @@
-#!/local/data/idsbc/idstaff/gladier/miniconda3/envs/gladier/bin/python
+#!/usr/bin/env python
 
 import time, argparse, os
 from watchdog.observers import Observer
@@ -40,16 +40,28 @@ class Handler(FileSystemEventHandler):
         if event.is_directory:
             return None
         elif event.event_type == 'created':
-            #ClientLogic(event.src_path)
+            ClientLogic(event.src_path)
             return None
         elif event.event_type == 'modified':
             ClientLogic(event.src_path)
             return None
 
-
 def ClientLogic(event_file):
-    
-    pass
+    print(event_file)
+
+def deploy_flow():
+    import simple_sync_def
+    # Deploy the flow
+    flow_title = f"Simple Sync Flow"
+    flow = fc.deploy_flow(
+    simple_sync_def.flow_definition, 
+    title=flow_title,
+    input_schema=simple_sync_def.input_schema,
+    )
+    flow_id = flow['id']
+    flow_scope = flow['globus_auth_scope']
+    print(flow_id)
+    return flow_id
 
 # Arg Parsing
 def parse_args():
@@ -59,26 +71,31 @@ def parse_args():
 
 if __name__ == '__main__':
 
+    from globus_automate_client import create_flows_client
+    fc = create_flows_client()
+
+    #flow_id = deploy_flow()
+    flow_id = 'a95b8166-c4af-47ed-abae-ec3f430497b4'
     args = parse_args()
     local_dir = args.localdir
 
     # Base input for the flow
     base_input = {
         "input": {
-            #Processing variables
-            "base_local_dir": local_dir,
             # globus local endpoint
-            "globus_local_ep": depl_input['input']['beamline_globus_ep'],
-    	    "globus_local_mount" : depl_input['input']['ssx_eagle_mount'],
+            "example_transfer_source_endpoint_id": '',
+    	    "example_transfer_source_endpoint_path" : '',
             # globus endpoint and mount point for remote resource
-            "globus_dest_ep": depl_input['input']['theta_globus_ep'], 
-    	    "globus_dest_mount" : depl_input['input']['ssx_eagle_mount'],
+            "example_transfer_destination_id": '', 
+    	    "example_transfer_destination_path" : '',
         }
     }
 
     ##Creates and starts the watcher
-    exp = KanzusTriggers(local_dir)
+    exp = FileTrigger(local_dir)
     exp.run()
+
+
 
 
 

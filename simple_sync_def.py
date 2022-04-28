@@ -1,4 +1,4 @@
-simple_transfer_def = {
+flow_definition = {
         'Comment': 'Transfer a file or directory in Globus',
         'StartAt': 'ExampleTransfer',
         'States': {
@@ -24,3 +24,45 @@ simple_transfer_def = {
         }
     }
 
+input_schema = {
+    "additionalProperties": False,
+    "required": [
+        "input"
+    ],
+    "properties": {
+        "input": {
+            "type": "object",
+            "required": [
+                "example_transfer_source_endpoint_id", "example_transfer_source_path", "example_transfer_destination_endpoint_id", "example_transfer_destination_path",
+                
+                "principal", "principal_type", 
+            ],
+            "properties": {
+                "example_transfer_source_endpoint_id": {
+                    "type": "string",
+                    "format": "uuid",
+                },
+                "example_transfer_source_path": {
+                    "type": "string",
+                },
+                "example_transfer_destination_endpoint_id": {
+                    "type": "string",
+                    "format": "uuid",
+                },
+                "example_transfer_destination_path": {
+                    "type": "string",
+                },
+                "principal": {
+                    "type": "string",
+                    "format": "uuid",
+                },
+                "principal_type": {
+                    "type": "string",
+                    "enum": ["identity", "group"]
+                },
+                
+            },
+            "additionalProperties": False
+        }
+    }
+}
