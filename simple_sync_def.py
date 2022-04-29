@@ -66,3 +66,25 @@ input_schema = {
         }
     }
 }
+
+#!/usr/bin/env python
+
+def deploy_flow():
+    from globus_automate_client import create_flows_client
+    fc = create_flows_client()
+    # Deploy the flow
+    flow_title = f"Simple Sync Flow"
+    flow = fc.deploy_flow(
+    flow_definition, 
+    title=flow_title,
+    input_schema=input_schema,
+    )
+    flow_id = flow['id']
+    flow_scope = flow['globus_auth_scope']
+    print(flow_id)
+    return flow_id
+
+
+if __name__ == '__main__':
+
+    deploy_flow()
