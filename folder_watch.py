@@ -14,7 +14,6 @@ class FileTrigger():
 
     def run(self):
         print("Simple FileTrigger Started")
-        print("Pattern: " + self.pattern)
         print('')
 
         if not self.ClientLogic:
