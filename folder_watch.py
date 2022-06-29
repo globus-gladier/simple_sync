@@ -6,10 +6,10 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class FileTrigger():
-    def __init__(self, folder_path, pattern='', ClientLogic=None):
+    def __init__(self, folder_path, filter, ClientLogic=None):
         self.observer = Observer()
         self.folder_path = folder_path
-        self.pattern = pattern
+        self.pattern = filter
         self.ClientLogic = ClientLogic
 
     def run(self):
@@ -30,7 +30,7 @@ class FileTrigger():
         print("Monitoring: " + self.folder_path)
         print('')
 
-        event_handler = Handler(self.ClientLogic, pattern)
+        event_handler = Handler(self.ClientLogic, self.pattern)
         self.observer.schedule(event_handler, self.folder_path, recursive = True)
         self.observer.start()
 
@@ -58,10 +58,10 @@ class Handler(FileSystemEventHandler):
             # self.logic_function(event.src_path)
             return None
         elif event.event_type == 'created':
-            # print("file created")
+            print("file created")
             if event.src_path.endswith(self.pattern):
-                    self.logic_function(event.src_path)
                     print("File with " + self.pattern)
+                    self.logic_function(event.src_path)
                     return None
         # elif event.event_type == 'modified':
         #     self.logic_function(event.src_path)

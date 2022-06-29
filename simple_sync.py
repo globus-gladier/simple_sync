@@ -1,13 +1,20 @@
+#!/usr/bin/env python
+
+import os
+import argparse
+
+#### This could go into a different file and be invoked without the file watcher
+from globus_automate_client import create_flows_client
+fc = create_flows_client()
+
 def run_sync_flow(event_file):
     
     # Using a flow that was deployed using the "Automation Using Globus Flows" notebook
-    flow_id = '5e1d78d8-1fa5-497c-94d8-be96489b666d'#raf
     flow_id = 'a54ae3a9-acda-4c40-9434-305d3680ba49'#rachana
     flow_scope = 'https://auth.globus.org/scopes/a54ae3a9-acda-4c40-9434-305d3680ba49/flow_a54ae3a9_acda_4c40_9434_305d3680ba49_user'
     
      # Source is the endpoint where this trigger code is running
      # This id is my laptop
-     #raf 'cde22510-5de7-11ec-9b5c-f9dfb1abb183'
     source_id = 'e7d4f216-9a9a-11ea-8ece-02c81b96a709'
     # to get the directory where the .done file is stored, 
     # and add a ending / to satisfy Transfer requirements
@@ -60,8 +67,8 @@ def run_sync_flow(event_file):
 # Arg Parsing
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('localdir', type=str, default='.')
-    parser.add_argument('filter', type=str, default='')
+    parser.add_argument('--localdir', type=str, default='.')
+    parser.add_argument('--filter', type=str, default='')
     return parser.parse_args()
 
 
@@ -73,5 +80,5 @@ if __name__ == '__main__':
     local_dir = os.path.expanduser(args.localdir)
 
     ##Creates and starts the watcher
-    exp = FileTrigger(local_dir, pattern=args.filter, ClientLogic=run_sync_flow)
+    exp = FileTrigger(local_dir, filter=args.filter, ClientLogic=run_sync_flow)
     exp.run()
