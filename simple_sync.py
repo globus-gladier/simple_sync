@@ -61,6 +61,7 @@ def run_sync_flow(event_file):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('localdir', type=str, default='.')
+    parser.add_argument('filter', type=str, default='')
     return parser.parse_args()
 
 
@@ -72,5 +73,5 @@ if __name__ == '__main__':
     local_dir = os.path.expanduser(args.localdir)
 
     ##Creates and starts the watcher
-    exp = FileTrigger(local_dir, ClientLogic=run_sync_flow)
+    exp = FileTrigger(local_dir, pattern=args.filter, ClientLogic=run_sync_flow)
     exp.run()

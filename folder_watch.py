@@ -30,7 +30,7 @@ class FileTrigger():
         print("Monitoring: " + self.folder_path)
         print('')
 
-        event_handler = Handler(self.ClientLogic)
+        event_handler = Handler(self.ClientLogic, pattern)
         self.observer.schedule(event_handler, self.folder_path, recursive = True)
         self.observer.start()
 
@@ -44,10 +44,13 @@ class FileTrigger():
         self.observer.join()
 
 class Handler(FileSystemEventHandler):
-    def __init__(self, ClientLogic):
+    def __init__(self, ClientLogic, pattern):
         super(FileSystemEventHandler).__init__()
         self.logic_function = ClientLogic
+        self.pattern = pattern
 
+    #This is the callback function for file events.
+    #You can edit it to trigger at file creation, modification, deletion and have different behaviours for each.
     def on_any_event(self, event):
         # print(event)
         if event.is_directory and event.event_type == 'created':
@@ -56,11 +59,10 @@ class Handler(FileSystemEventHandler):
             return None
         elif event.event_type == 'created':
             # print("file created")
-            split = os.path.splitext(event.src_path)
-            if (split[1] == '.done'):
-                self.logic_function(event.src_path)
-                return None
-            print("file without .done")
+            if event.src_path.endswith(self.pattern):
+                    self.logic_function(event.src_path)
+                    print("File with " + self.pattern)
+                    return None
         # elif event.event_type == 'modified':
         #     self.logic_function(event.src_path)
         #     return None
