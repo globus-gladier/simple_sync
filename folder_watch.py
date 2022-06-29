@@ -48,14 +48,19 @@ class Handler(FileSystemEventHandler):
         super(FileSystemEventHandler).__init__()
         self.logic_function = ClientLogic
 
-
     def on_any_event(self, event):
-        #print(event)
-        if event.is_directory:
+        # print(event)
+        if event.is_directory and event.event_type == 'created':
+            # print("directory created")
+            # self.logic_function(event.src_path)
             return None
         elif event.event_type == 'created':
-            self.logic_function(event.src_path)
-            return None
+            # print("file created")
+            split = os.path.splitext(event.src_path)
+            if (split[1] == '.done'):
+                self.logic_function(event.src_path)
+                return None
+            print("file without .done")
         # elif event.event_type == 'modified':
         #     self.logic_function(event.src_path)
         #     return None
