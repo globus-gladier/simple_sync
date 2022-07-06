@@ -42,7 +42,8 @@ def run_sync_flow(event_file):
     group_id = '50b6a29c-63ac-11e4-8062-22000ab68755'
 
     #Gather some information for the transfer 
-    n_files = len(glob.glob(source_path+'*'))
+    file_names = glob.glob(source_path+'*')
+    n_files = len(file_names)
     
 
     # Base input for the flow
@@ -66,11 +67,12 @@ def run_sync_flow(event_file):
             #information to ingest
             "search_ingest_doc": {
             "search_index": search_index,
-            "search_subject": f"globus://{destination_id}/{remote_path}",
+            "search_subject": event_folder_name,
             "search_visible_to": ["public"],
             "search_content_metadata": {
                 "title": event_folder_name,
                 "Username":"raf",
+                "fname": file_names,
                 "n_files":n_files
             }
         }

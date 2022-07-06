@@ -58,10 +58,11 @@ class Handler(FileSystemEventHandler):
             # self.logic_function(event.src_path)
             return None
         elif event.event_type == 'created':
-            print("file created")
+            print("File created: "+ os.path.basename(event.src_path))
             for pattern in self.include_filters:
                 if event.src_path.endswith(pattern):
                         print("File with " + pattern)
+                        print("Starting Flow")
                         self.logic_function(event.src_path)
                         return None
         # elif event.event_type == 'modified':
