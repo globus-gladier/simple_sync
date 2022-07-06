@@ -6,10 +6,10 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class FileTrigger():
-    def __init__(self, folder_path, filter, ClientLogic=None):
+    def __init__(self, folder_path, include_filters, ClientLogic=None):
         self.observer = Observer()
         self.folder_path = folder_path
-        self.pattern = filter
+        self.include_filters = include_filters
         self.ClientLogic = ClientLogic
 
     def run(self):
@@ -30,7 +30,7 @@ class FileTrigger():
         print("Monitoring: " + self.folder_path)
         print('')
 
-        event_handler = Handler(self.ClientLogic, self.pattern)
+        event_handler = Handler(self.ClientLogic, self.include_filters)
         self.observer.schedule(event_handler, self.folder_path, recursive = True)
         self.observer.start()
 
@@ -44,10 +44,10 @@ class FileTrigger():
         self.observer.join()
 
 class Handler(FileSystemEventHandler):
-    def __init__(self, ClientLogic, pattern):
+    def __init__(self, ClientLogic, include_filters):
         super(FileSystemEventHandler).__init__()
         self.logic_function = ClientLogic
-        self.pattern = pattern
+        self.include_filters = include_filters
 
     #This is the callback function for file events.
     #You can edit it to trigger at file creation, modification, deletion and have different behaviours for each.
@@ -59,10 +59,11 @@ class Handler(FileSystemEventHandler):
             return None
         elif event.event_type == 'created':
             print("file created")
-            if event.src_path.endswith(self.pattern):
-                    print("File with " + self.pattern)
-                    self.logic_function(event.src_path)
-                    return None
+            for pattern in self.include_filters:
+                if event.src_path.endswith(pattern):
+                        print("File with " + pattern)
+                        self.logic_function(event.src_path)
+                        return None
         # elif event.event_type == 'modified':
         #     self.logic_function(event.src_path)
         #     return None

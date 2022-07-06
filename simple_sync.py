@@ -2,6 +2,7 @@
 
 import os
 import argparse
+import glob
 
 #### This could go into a different file and be invoked without the file watcher
 from globus_automate_client import create_flows_client
@@ -10,12 +11,12 @@ fc = create_flows_client()
 def run_sync_flow(event_file):
     
     # Using a flow that was deployed using the "Automation Using Globus Flows" notebook
-    flow_id = 'a54ae3a9-acda-4c40-9434-305d3680ba49'#rachana
-    flow_scope = 'https://auth.globus.org/scopes/a54ae3a9-acda-4c40-9434-305d3680ba49/flow_a54ae3a9_acda_4c40_9434_305d3680ba49_user'
+    flow_id = 'f18e35c2-594d-4fa4-a820-9b22e26f1f62'
+    flow_scope = 'https://auth.globus.org/scopes/78dae322-ac8f-4fee-b008-f471ce66dbb5/flow_a54ae3a9_acda_4c40_9434_305d3680ba49_user'
     
      # Source is the endpoint where this trigger code is running
      # This id is my laptop
-    source_id = 'e7d4f216-9a9a-11ea-8ece-02c81b96a709'
+    source_id = '6d3275c0-e5d3-11ec-9bd1-2d2219dcc1fa'
     # to get the directory where the .done file is stored, 
     # and add a ending / to satisfy Transfer requirements
     # for moving a directory
@@ -25,11 +26,11 @@ def run_sync_flow(event_file):
     # to get a resonable label, using the file that triggered the run
     event_file_name = os.path.basename(event_file)
     
+    search_index = '563c3d98-6fa8-4ef5-83e2-0f378efe0a5f'
 
     # PEARC demo endpoint
-    #'cde22510-5de7-11ec-9b5c-f9dfb1abb183' raf
-    destination_id = 'b7641b2a-f74a-11ec-835d-cd84b862b754'
-    remote_path = '/Project1/'
+    destination_id = '6d3275c0-e5d3-11ec-9bd1-2d2219dcc1fa'
+    remote_path = '~/Project1/'
     # to be able to set permission on the specific folder being moved
     # the name of the source folder needs to be worked out to use in 
     # destination path
@@ -39,6 +40,10 @@ def run_sync_flow(event_file):
 
     # group id to share with
     group_id = '50b6a29c-63ac-11e4-8062-22000ab68755'
+
+    #Gather some information for the transfer 
+    n_files = len(glob.glob(source_path+'*'))
+    
 
     # Base input for the flow
     base_input = {
@@ -57,18 +62,35 @@ def run_sync_flow(event_file):
             # Grant access to the Tutorial Users group
             "principal_identifier": group_id,
             "principal_type": "group",
+
+            #information to ingest
+            "search_ingest_doc": {
+            "search_index": search_index,
+            "search_subject": f"globus://{destination_id}/{remote_path}",
+            "search_visible_to": ["public"],
+            "search_content_metadata": {
+                "title": event_folder_name,
+                "Username":"raf",
+                "n_files":n_files
+            }
         }
     }
-    
-    run_result = fc.run_flow(flow_id = flow_id, flow_scope = flow_scope, flow_input= base_input, label=event_file_name, tags=['PEARC_Test'])
+    }
+
+    run_result = fc.run_flow(flow_id = flow_id, flow_scope = None, flow_input= base_input, label=event_file_name, tags=['PEARC_Test'])
     print('Moving and sharing: ' + event_folder_name)
     print('https://app.globus.org/runs/'+run_result['run_id'])
+
+    print('Example portal for search index: ' + search_index)
+    print('https://acdc.alcf.anl.gov/globus-tutorial/' + search_index)
+    print('')
+    
 
 # Arg Parsing
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--localdir', type=str, default='.')
-    parser.add_argument('--filter', type=str, default='')
+    parser.add_argument('--localdir', type=str, default=os.path.abspath('.'))
+    parser.add_argument('--include', nargs='*', type=str, default='')
     return parser.parse_args()
 
 
@@ -78,7 +100,8 @@ if __name__ == '__main__':
 
     args = parse_args()
     local_dir = os.path.expanduser(args.localdir)
+    
 
     ##Creates and starts the watcher
-    exp = FileTrigger(local_dir, filter=args.filter, ClientLogic=run_sync_flow)
+    exp = FileTrigger(local_dir, include_filters=args.include, ClientLogic=run_sync_flow)
     exp.run()
