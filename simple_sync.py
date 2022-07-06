@@ -39,7 +39,12 @@ def run_sync_flow(event_file):
     # to get a resonable label, using the file that triggered the run
     event_file_name = os.path.basename(event_file)
 
-
+    # to be able to set permission on the specific folder being moved
+    # the name of the source folder needs to be worked out to use in 
+    # destination path
+    event_folder_name = os.path.basename(event_folder)
+    # Add a slash to meet Transfer requirements for directory transfer
+    destination_path = os.path.join(remote_path, event_folder_name, "")
 
     # Base input for the flow
     base_input = {
