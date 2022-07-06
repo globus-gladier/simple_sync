@@ -11,35 +11,40 @@ fc = create_flows_client()
 def run_sync_flow(event_file):
     
     # Using a flow that was deployed using the "Automation Using Globus Flows" notebook
-    flow_id = 'f18e35c2-594d-4fa4-a820-9b22e26f1f62'
-    flow_scope = 'https://auth.globus.org/scopes/78dae322-ac8f-4fee-b008-f471ce66dbb5/flow_a54ae3a9_acda_4c40_9434_305d3680ba49_user'
+    # To do: update to flow that needs to be run 
+    flow_id = '6d22887b-f192-4b22-9cdc-67cfa3405ae8'
+    # To do: update the scope for the flow
+    flow_scope = 'https://auth.globus.org/scopes/6d22887b-f192-4b22-9cdc-67cfa3405ae8/flow_6d22887b_f192_4b22_9cdc_67cfa3405ae8_user'
     
-     # Source is the endpoint where this trigger code is running
-     # This id is my laptop
-    source_id = '6d3275c0-e5d3-11ec-9bd1-2d2219dcc1fa'
+    # Source is the endpoint where this trigger code is running
+    # To do: update to id of the endpoint where this code is running
+    source_id = 'e7d4f216-9a9a-11ea-8ece-02c81b96a709'
+   
+    # To do: update to destination endpoint, 
+    # Must be a shared endpoint or guest collection so permission can be set
+    destination_id = 'b7641b2a-f74a-11ec-835d-cd84b862b754'
+    # To do: update path
+    remote_path = '/Test/'
+
+    # To do: update to set group id to share with
+    # group id to share with
+    group_id = '50b6a29c-63ac-11e4-8062-22000ab68755'
+
     # to get the directory where the .done file is stored, 
     # and add a ending / to satisfy Transfer requirements
     # for moving a directory
     event_folder = os.path.dirname(event_file)
     source_path = os.path.join(event_folder, "") 
-   
+
     # to get a resonable label, using the file that triggered the run
     event_file_name = os.path.basename(event_file)
-    
-    search_index = '563c3d98-6fa8-4ef5-83e2-0f378efe0a5f'
 
-    # PEARC demo endpoint
-    destination_id = '6d3275c0-e5d3-11ec-9bd1-2d2219dcc1fa'
-    remote_path = '~/Project1/'
     # to be able to set permission on the specific folder being moved
     # the name of the source folder needs to be worked out to use in 
     # destination path
     event_folder_name = os.path.basename(event_folder)
     # Add a slash to meet Transfer requirements for directory transfer
     destination_path = os.path.join(remote_path, event_folder_name, "")
-
-    # group id to share with
-    group_id = '50b6a29c-63ac-11e4-8062-22000ab68755'
 
     #Gather some information for the transfer 
     file_names = glob.glob(source_path+'*')
@@ -64,29 +69,12 @@ def run_sync_flow(event_file):
             "principal_identifier": group_id,
             "principal_type": "group",
 
-            #information to ingest
-            "search_ingest_doc": {
-            "search_index": search_index,
-            "search_subject": event_folder_name,
-            "search_visible_to": ["public"],
-            "search_content_metadata": {
-                "title": event_folder_name,
-                "Username":"raf",
-                "fname": file_names,
-                "n_files":n_files
-            }
         }
-    }
     }
 
     run_result = fc.run_flow(flow_id = flow_id, flow_scope = None, flow_input= base_input, label=event_file_name, tags=['PEARC_Test'])
     print('Moving and sharing: ' + event_folder_name)
     print('https://app.globus.org/runs/'+run_result['run_id'])
-
-    print('Example portal for search index: ' + search_index)
-    print('https://acdc.alcf.anl.gov/globus-tutorial/' + search_index)
-    print('')
-    
 
 # Arg Parsing
 def parse_args():
