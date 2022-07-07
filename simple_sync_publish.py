@@ -13,8 +13,7 @@ def run_sync_flow(event_file):
     # Using a flow that was deployed using the "Automation Using Globus Flows" notebook
     # To do: update to flow that needs to be run 
     flow_id = '78e2c50f-7135-4995-9957-da3b7053e52f'
-    # To do: update the scope for the flow
-    flow_scope = 'https://auth.globus.org/scopes/78e2c50f-7135-4995-9957-da3b7053e52f/flow_78e2c50f_7135_4995_9957_da3b7053e52f_user'
+    flow_scope = fc.get_flow(flow_id).data['globus_auth_scope']
     
     # Source is the endpoint where this trigger code is running
     # To do: update to id of the endpoint where this code is running
