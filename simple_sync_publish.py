@@ -6,7 +6,9 @@ import glob
 
 #### This could go into a different file and be invoked without the file watcher
 from globus_automate_client import create_flows_client
+from user import UserIdentity
 fc = create_flows_client()
+user_identity = UserIdentity()
 
 def run_sync_flow(event_file):
     
@@ -89,7 +91,7 @@ def run_sync_flow(event_file):
                 },
                 "search_entry_id" : "Entry 00",
                 "search_restricted_entry_id" : "Entry 1",
-                "search_restricted_visible_to" : ["urn:globus:auth:identity:c37cb090-d274-11e5-b57b-dfbe55a4f359"],
+                "search_restricted_visible_to" : [user_identity.principal_urn],
                 "search_content_restricted_metadata": {
                     "secret": "secret 070602",
                      "Username":"novak",
