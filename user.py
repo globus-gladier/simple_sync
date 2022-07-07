@@ -19,6 +19,8 @@ class UserIdentity:
 
         auth_code = input("Please enter the code you get after login here: ").strip()
         token_response = client.oauth2_exchange_code_for_tokens(auth_code)
+
+        # Set the principal URN so it can be referenced at a later time.
         self.principal_urn = (
             f"urn:globus:auth:identity:{token_response.decode_id_token()['sub']}"
         )

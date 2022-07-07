@@ -8,6 +8,8 @@ import glob
 from globus_automate_client import create_flows_client
 from user import UserIdentity
 fc = create_flows_client()
+# Use a helper-class to login, to get the user's Globus identity uuid.
+# This ID is used to set access control on search records in the flow below.
 user_identity = UserIdentity()
 
 def run_sync_flow(event_file):
@@ -91,6 +93,8 @@ def run_sync_flow(event_file):
                 },
                 "search_entry_id" : "Entry 00",
                 "search_restricted_entry_id" : "Entry 1",
+                # Principal URNs look like urn:globus:auth:identity:abcde-efg-hijk-lmno-1234-abcdef123456
+                # See more at: https://docs.globus.org/api/search/overview/#principal_urns
                 "search_restricted_visible_to" : [user_identity.principal_urn],
                 "search_content_restricted_metadata": {
                     "secret": "secret 070602",
