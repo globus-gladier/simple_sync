@@ -14,7 +14,7 @@ def run_sync_flow(event_file):
     # To do: update to flow that needs to be run 
     flow_id = '6d22887b-f192-4b22-9cdc-67cfa3405ae8'
     # To do: update the scope for the flow
-    flow_scope = 'https://auth.globus.org/scopes/6d22887b-f192-4b22-9cdc-67cfa3405ae8/flow_6d22887b_f192_4b22_9cdc_67cfa3405ae8_user'
+    flow_scope = fc.get_flow(flow_id).data['globus_auth_scope']
     
     # Source is the endpoint where this trigger code is running
     # To do: update to id of the endpoint where this code is running
