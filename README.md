@@ -20,11 +20,11 @@ Both scripts can be executes to register a new flow with globus services:
 
 The clients (`simple_sync.py` and `simple_sync_publish.py` are executables with the following inputs:
 
-`--local_dir` defines the folder to watch.
+`--localdir` defines the folder to watch.
 `--includes` defines the file types that will trigger the flow. This can receive a list separated by spaces.
 
 ```bash
-./simplesync.py --local_dir $local_dir --include .txt
+./simplesync.py --local_dir $localdir --include .txt
 ```
 
 ## Client logic

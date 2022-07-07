@@ -12,9 +12,9 @@ def run_sync_flow(event_file):
     
     # Using a flow that was deployed using the "Automation Using Globus Flows" notebook
     # To do: update to flow that needs to be run 
-    flow_id = '9f330207-3db6-4f57-8c72-8253922ae754'
+    flow_id = '78e2c50f-7135-4995-9957-da3b7053e52f'
     # To do: update the scope for the flow
-    flow_scope = 'https://auth.globus.org/scopes/9f330207-3db6-4f57-8c72-8253922ae754/flow_9f330207_3db6_4f57_8c72_8253922ae754_user'
+    flow_scope = 'https://auth.globus.org/scopes/78e2c50f-7135-4995-9957-da3b7053e52f/flow_78e2c50f_7135_4995_9957_da3b7053e52f_user'
     
     # Source is the endpoint where this trigger code is running
     # To do: update to id of the endpoint where this code is running
@@ -51,7 +51,7 @@ def run_sync_flow(event_file):
 
     #Globus search information
     #To do: Specify the search index to publish your metadata 
-    search_index = '563c3d98-6fa8-4ef5-83e2-0f378efe0a5f'
+    search_index = 'dd9ec936-6ce3-4c31-895f-a2b4be27d3cc'
 
     #Gather some information for the transfer
     #To do: add specific information and add it to "search_content_metadata" in the base_in
@@ -79,26 +79,32 @@ def run_sync_flow(event_file):
 
             #information to ingest on globus Search
             "search_ingest_doc": {
-            "search_index": search_index,
-            "search_subject": event_folder_name,
-            "search_visible_to": ["public"],
-            "search_content_metadata": {
-                "title": event_folder_name,
-                "Username":"raf",
-                "fname": file_names,
-                "n_files":n_files
+                "search_index": search_index,
+                "search_subject": event_folder_name,
+                "search_visible_to": ["public"],
+                "search_content_metadata": {
+                  "title": event_folder_name,
+                  "fname": file_names,
+                 "n_files":n_files
+                },
+                "search_entry_id" : "Entry 00",
+                "search_restricted_entry_id" : "Entry 1",
+                "search_restricted_visible_to" : ["urn:globus:auth:identity:c37cb090-d274-11e5-b57b-dfbe55a4f359"],
+                "search_content_restricted_metadata": {
+                    "secret": "secret 070602",
+                     "Username":"novak",
+                }
             }
         }
-    }
     }
 
     run_result = fc.run_flow(flow_id = flow_id, flow_scope = flow_scope, flow_input= base_input, label=event_file_name, tags=['PEARC_Test'])
     print('Moving and sharing: ' + event_folder_name)
     print('https://app.globus.org/runs/'+run_result['run_id'])
 
-    print('Example portal for search index: ' + search_index)
-    print('https://acdc.alcf.anl.gov/globus-tutorial/' + search_index)
-    print('')
+    print('Search index data published to' + search_index)
+    # print('https://acdc.alcf.anl.gov/globus-tutorial/' + search_index)
+    # print('')
     
 
 # Arg Parsing
