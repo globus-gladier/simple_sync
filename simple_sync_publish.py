@@ -107,7 +107,7 @@ def run_sync_flow(event_file):
     print('Moving and sharing: ' + event_folder_name)
     print('https://app.globus.org/runs/'+run_result['run_id'])
 
-    print('Search index data published to' + search_index)
+    print('Search index data published to ' + search_index)
     # print('https://acdc.alcf.anl.gov/globus-tutorial/' + search_index)
     # print('')
     
