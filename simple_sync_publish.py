@@ -23,13 +23,13 @@ def run_sync_flow(event_file):
     # To do: update to id of the endpoint where this code is running
     source_id = 'e7d4f216-9a9a-11ea-8ece-02c81b96a709'
     
-    # To do: update to destination endpoint, 
+    # This is set to PEARC22 Tutorial Guest Collection 
     # Must be a shared endpoint or guest collection so permission can be set
-    destination_id = 'b7641b2a-f74a-11ec-835d-cd84b862b754'
-    # To do: update path
-    remote_path = '/Test/'
+    destination_id = '584ccac3-5124-4c0d-85c9-62848d503f70'
+    # To do: update path to be specific to your user account e.g. /flows/janedoe/.
+    remote_path = '/flows/USERNAME/'
 
-    # To do: update to set group id to share with
+    # Update to set group id to share with. This is set for Tutorial Users Group
     # group id to share with
     group_id = '50b6a29c-63ac-11e4-8062-22000ab68755'
 
