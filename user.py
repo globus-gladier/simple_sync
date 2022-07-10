@@ -15,9 +15,9 @@ class UserIdentity:
         client.oauth2_start_flow(requested_scopes=globus_sdk.AuthClient.scopes.openid)
 
         authorize_url = client.oauth2_get_authorize_url()
-        print("Please go to this URL and login: {0}".format(authorize_url))
+        print("Please go to this URL and login: \n {0}".format(authorize_url))
 
-        auth_code = input("Please enter the code you get after login here: ").strip()
+        auth_code = input("\n Please enter the code you get after login here: ").strip()
         token_response = client.oauth2_exchange_code_for_tokens(auth_code)
 
         # Set the principal URN so it can be referenced at a later time.
