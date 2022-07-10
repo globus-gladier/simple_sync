@@ -32,6 +32,11 @@ def run_sync_flow(event_file):
     # Update to set group id to share with. This is set for Tutorial Users Group
     # group id to share with
     group_id = '50b6a29c-63ac-11e4-8062-22000ab68755'
+    
+    #Globus search information
+    #To do: Specify the search index to publish your metadata 
+    search_index = 'dd9ec936-6ce3-4c31-895f-a2b4be27d3cc'
+
 
     # to get the directory where the .done file is stored, 
     # and add a ending / to satisfy Transfer requirements
@@ -51,10 +56,6 @@ def run_sync_flow(event_file):
     event_folder_name = os.path.basename(event_folder)
     # Add a slash to meet Transfer requirements for directory transfer
     destination_path = os.path.join(remote_path, event_folder_name, "")
-
-    #Globus search information
-    #To do: Specify the search index to publish your metadata 
-    search_index = 'dd9ec936-6ce3-4c31-895f-a2b4be27d3cc'
 
     #Gather some information for the transfer
     #To do: add specific information and add it to "search_content_metadata" in the base_in
